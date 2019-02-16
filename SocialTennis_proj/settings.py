@@ -82,8 +82,8 @@ WSGI_APPLICATION = 'SocialTennis_proj.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'SocialTennis_database',
-        'USER': 'SocialTennis_user',
+        'NAME': 'socialtennis_database',
+        'USER': 'socialtennis_user',
         'PASSWORD': os.environ.get('SOCIALTENNIS_DATABASE_PASSWORD', 'dev-password'),
         'HOST': '127.0.0.1',
         'PORT': '5432',
