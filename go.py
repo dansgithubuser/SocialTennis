@@ -13,5 +13,5 @@ djangogo.main(args,
 	app='SocialTennis',
 	database='socialtennis_database',
 	user='socialtennis_user',
-	heroku_url='https://rocky-beach-86807.herokuapp.com/',
+	heroku_url='https://dans-social-tennis.herokuapp.com/',
 )

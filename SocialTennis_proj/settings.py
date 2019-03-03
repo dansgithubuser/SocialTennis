@@ -26,7 +26,7 @@ SECRET_KEY = 'trzo0c_4($b6_8%=0)mw7n_5p&e54e&b$=*041yao1kicjgh-#'
 DEBUG = False
 
 ALLOWED_HOSTS = [
-    'https://rocky-beach-86807.herokuapp.com/',
+    'https://dans-social-tennis.herokuapp.com/',
 ]
 
 
