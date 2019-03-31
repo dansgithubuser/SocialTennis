@@ -5,6 +5,11 @@
 {% endblock %}
 
 {% block content %}
+  <form action="/friend" method="post">
+    Friend Name: <input type="text" name="name"><br>
+    <input type="submit" value="Create Friend">
+    {% csrf_token %}
+  </form>
   {% for friend in friends %}
     <p>{{ friend.name }}</p>
   {% endfor %}
