@@ -5,5 +5,7 @@
 {% endblock %}
 
 {% block content %}
-  <p>Hello</p>
+  {% for friend in friends %}
+    <p>{{ friend.name }}</p>
+  {% endfor %}
 {% endblock %}
