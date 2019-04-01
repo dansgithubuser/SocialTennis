@@ -4,6 +4,7 @@ from django.shortcuts import render, redirect
 from django.views.decorators.csrf import csrf_exempt
 from . import models
 
+
 @csrf_exempt
 def signup(request):
     if request.method == 'POST':
@@ -28,4 +29,10 @@ def friend(request):
         user_id=request.user.id,
         name=request.POST['name'],
     )
+    return redirect('/home')
+
+def event(request, who, friend_id):
+    print(request)
+    print(who)
+    print(friend_id)
     return redirect('/home')

@@ -10,7 +10,20 @@
     <input type="submit" value="Create Friend">
     {% csrf_token %}
   </form>
-  {% for friend in friends %}
-    <p>{{ friend.name }}</p>
-  {% endfor %}
+
+  <table>
+    {% for friend in friends %}
+      <tr>
+        <td>{{ friend.name }}</td>
+        <td>
+          <form method="post">
+            <button type="submit" formaction="/event/me/{{ friend.id }}">Me</button>
+            <button type="submit" formaction="/event/them/{{ friend.id }}">Them</button>
+            <button type="submit" formaction="/event/neither/{{ friend.id }}">Neither</button>
+            {% csrf_token %}
+          </form>
+        </td>
+      </tr>
+    {% endfor %}
+  </table>
 {% endblock %}
