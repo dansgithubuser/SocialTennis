@@ -2,8 +2,8 @@ from django.contrib.auth import login, authenticate
 from django.contrib.auth.forms import UserCreationForm
 from django.shortcuts import render, redirect
 from django.views.decorators.csrf import csrf_exempt
+from django.http import HttpResponse
 from . import models
-
 
 @csrf_exempt
 def signup(request):
@@ -31,8 +31,11 @@ def friend(request):
     )
     return redirect('/home')
 
-def event(request, who, friend_id):
-    print(request)
-    print(who)
-    print(friend_id)
+def event(request, server, friend_id):
+    if models.Friend.objects.get(id=friend_id).user_id != request.user.id:
+        return HttpResponse(status=403)
+    models.Event.objects.create(
+        friend_id=friend_id,
+        server=server
+    )
     return redirect('/home')

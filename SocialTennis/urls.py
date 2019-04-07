@@ -7,5 +7,5 @@ urlpatterns = [
     path('home', views.home),
     path('login', auth_views.LoginView.as_view(template_name='login.html', redirect_field_name='home')),
     path('friend', views.friend),
-    re_path(r'^event/([^/]+)/(\d+)$', views.event),
+    path('event/<slug:server>/<int:friend_id>', views.event),
 ]
