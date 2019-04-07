@@ -5,5 +5,25 @@
 {% endblock %}
 
 {% block content %}
-  <p>Hello</p>
+  <form action="/friend" method="post">
+    Friend Name: <input type="text" name="name"><br>
+    <input type="submit" value="Create Friend">
+    {% csrf_token %}
+  </form>
+
+  <table>
+    {% for friend in friends %}
+      <tr>
+        <td>{{ friend.name }}</td>
+        <td>
+          <form method="post">
+            <button type="submit" formaction="/event/me/{{ friend.id }}">Me</button>
+            <button type="submit" formaction="/event/them/{{ friend.id }}">Them</button>
+            <button type="submit" formaction="/event/neither/{{ friend.id }}">Neither</button>
+            {% csrf_token %}
+          </form>
+        </td>
+      </tr>
+    {% endfor %}
+  </table>
 {% endblock %}
