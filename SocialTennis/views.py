@@ -1,3 +1,4 @@
+import datetime
 from django.contrib.auth import login, authenticate
 from django.contrib.auth.forms import UserCreationForm
 from django.shortcuts import render, redirect
@@ -36,6 +37,7 @@ def event(request, server, friend_id):
         return HttpResponse(status=403)
     models.Event.objects.create(
         friend_id=friend_id,
-        server=server
+        server=server,
+        created_at=datetime.datetime.now() - datetime.timedelta(days=int(request.POST['days_ago'])),
     )
     return redirect('/home')

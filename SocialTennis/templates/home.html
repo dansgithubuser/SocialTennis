@@ -5,18 +5,27 @@
 {% endblock %}
 
 {% block content %}
+  <script>
+    function e(id){ return document.getElementById(id) }
+
+    function submitEventPrep (friendId) {
+      e(`eventForm${friendId}`).appendChild(e('daysAgo'));
+    }
+  </script>
+
   <form action="/friend" method="post">
     Friend Name: <input type="text" name="name"><br>
     <input type="submit" value="Create Friend">
     {% csrf_token %}
   </form>
+  days ago: <input type="number" id="daysAgo" name="days_ago" value=0>
 
   <table>
     {% for friend in friends %}
       <tr>
         <td>{{ friend.name }}</td>
         <td>
-          <form method="post">
+          <form method="post" id="eventForm{{ friend.id }}" onsubmit="return submitEventPrep({{ friend.id }})">
             <button type="submit" formaction="/event/me/{{ friend.id }}">Me</button>
             <button type="submit" formaction="/event/them/{{ friend.id }}">Them</button>
             <button type="submit" formaction="/event/neither/{{ friend.id }}">Neither</button>
