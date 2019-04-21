@@ -21,7 +21,7 @@ def signup(request):
     return render(request, 'signup.html', {'form': form})
 
 def home(request):
-    friends = models.Friend.objects.filter(user_id=request.user.id).order_by('id')
+    friends = models.Friend.objects.filter(user_id=request.user.id).select_related().order_by('id')
     return render(request, 'home.html', {'friends': friends})
 
 def friend(request):

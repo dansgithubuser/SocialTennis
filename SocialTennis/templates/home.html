@@ -23,6 +23,12 @@
             {% csrf_token %}
           </form>
         </td>
+        {% for event in friend.event_set.all %}
+          <td>
+            {{ event.created_at }}<br>
+            {{ event.server }}
+          </td>
+        {% endfor %}
       </tr>
     {% endfor %}
   </table>
