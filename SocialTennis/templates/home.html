@@ -20,25 +20,32 @@
   </form>
   days ago: <input type="number" id="daysAgo" name="days_ago" value=0>
 
-  <table>
+
+
+
+
+
+
+  <div class="grid-container">
     {% for friend in friends %}
-      <tr>
-        <td>{{ friend.name }}</td>
-        <td>
-          <form method="post" id="eventForm{{ friend.id }}" onsubmit="return submitEventPrep({{ friend.id }})">
-            <button type="submit" formaction="/event/me/{{ friend.id }}">Me</button>
-            <button type="submit" formaction="/event/them/{{ friend.id }}">Them</button>
-            <button type="submit" formaction="/event/neither/{{ friend.id }}">Neither</button>
-            {% csrf_token %}
-          </form>
-        </td>
+      <div class="friend">{{ friend.name }}</div>
+      <div class="server">
+        <form method="post" id="eventForm{{ friend.id }}" onsubmit="return submitEventPrep({{ friend.id }})">
+          <button type="submit" formaction="/event/me/{{ friend.id }}">Me</button>
+          <button type="submit" formaction="/event/them/{{ friend.id }}">Them</button>
+          <button type="submit" formaction="/event/neither/{{ friend.id }}">Neither</button>
+          <br><br>
+          {% csrf_token %}
+        </form>
+      </div>
+      <div class="events">
         {% for event in friend.event_set.all %}
-          <td>
-            {{ event.created_at }}<br>
-            {{ event.server }}
-          </td>
+            {{ event.server }} &nbsp;
+            {{ event.created_at }} <br>
         {% endfor %}
-      </tr>
+      </div>
     {% endfor %}
-  </table>
+  </div>
+
+
 {% endblock %}
