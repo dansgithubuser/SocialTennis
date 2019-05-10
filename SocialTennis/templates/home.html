@@ -10,6 +10,7 @@
 
     function submitEventPrep (friendId) {
       e(`eventForm${friendId}`).appendChild(e('daysAgo'));
+      e(`eventForm${friendId}`).appendChild(e('kind'));
     }
   </script>
 
@@ -18,13 +19,11 @@
     <input type="submit" value="Create Friend">
     {% csrf_token %}
   </form>
-  days ago: <input type="number" id="daysAgo" name="days_ago" value=0>
-
-
-
-
-
-
+  days ago: <input type="number" id="daysAgo" name="days_ago" value=0><br>
+  kind: <select id="kind" name="kind">
+    <option value="plan">plan</option>
+    <option value="meet">meet</option>
+  </select>
 
   <div class="grid-container">
     {% for friend in friends %}
@@ -41,7 +40,8 @@
       <div class="events">
         {% for event in friend.event_set.all %}
             {{ event.server }} &nbsp;
-            {{ event.created_at }} <br>
+            {{ event.created_at }} &nbsp;
+            {{ event.kind }} <br>
         {% endfor %}
       </div>
     {% endfor %}

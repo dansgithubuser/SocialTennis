@@ -38,6 +38,7 @@ def event(request, server, friend_id):
     models.Event.objects.create(
         friend_id=friend_id,
         server=server,
+        kind=request.POST.get('kind'),
         created_at=datetime.datetime.now() - datetime.timedelta(days=int(request.POST['days_ago'])),
     )
     return redirect('/home')
