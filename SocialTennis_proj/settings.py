@@ -46,6 +46,7 @@ if os.environ.get('DJANGOGO_ENV', None) == 'local':
     INSTALLED_APPS.append('django_extensions')
 
 MIDDLEWARE = [
+    'SocialTennis.middleware.ExceptionPrinter',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
