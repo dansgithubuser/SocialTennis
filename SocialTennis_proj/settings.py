@@ -55,6 +55,12 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
+MIDDLEWARE_CLASSES = (
+    # Simplified static file serving.
+    # https://warehouse.python.org/project/whitenoise/
+    'whitenoise.middleware.WhiteNoiseMiddleware',
+)
+
 ROOT_URLCONF = 'SocialTennis_proj.urls'
 
 LOGIN_REDIRECT_URL = '/home'
@@ -131,6 +137,13 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 STATIC_ROOT = os.path.join(os.path.dirname(os.path.realpath(__file__)), '..', 'static')
+
+# Extra places for collectstatic to find static files.
+STATICFILES_DIRS = (
+    os.path.join(os.path.dirname(os.path.realpath(__file__)), '..', 'static'),
+)
+
+STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
 # from manage.py check --deploy
 SECURE_HSTS_SECONDS = 3600
