@@ -10,4 +10,4 @@ class Event(models.Model):
     friend = models.ForeignKey('Friend', models.CASCADE)
     server = models.TextField(choices=[('user', 'user'), ('friend', 'friend'), ('neither', 'neither')])
     kind = models.TextField(choices=[('plan', 'meet')])
-    created_at = models.DateTimeField()
+    date = models.DateField()
