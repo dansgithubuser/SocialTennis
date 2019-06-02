@@ -22,6 +22,8 @@ def signup(request):
     return render(request, 'signup.html', {'form': form})
 
 def home(request):
+    if not request.user.id:
+        return redirect('/login')
     friends = models.Friend.objects.filter(user_id=request.user.id).select_related().order_by('id')
     return render(request, 'home.html', {'friends': friends})
 
