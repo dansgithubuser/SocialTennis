@@ -37,10 +37,11 @@ def friend(request):
 def event(request, server, friend_id):
     if models.Friend.objects.get(id=friend_id).user_id != request.user.id:
         return HttpResponse(status=403)
+    year, month, day = [int(i) for i in request.POST['date'].split('-')]
     models.Event.objects.create(
         friend_id=friend_id,
         server=server,
         kind=request.POST.get('kind'),
-        created_at=datetime.datetime.now() - datetime.timedelta(days=int(request.POST['days_ago'])),
+        date=datetime.date(year=year, month=month, day=day),
     )
     return redirect('/home')

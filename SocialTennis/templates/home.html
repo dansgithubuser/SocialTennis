@@ -9,9 +9,14 @@
     function e(id){ return document.getElementById(id) }
 
     function submitEventPrep (friendId) {
-      e(`eventForm${friendId}`).appendChild(e('daysAgo'));
+      e(`eventForm${friendId}`).appendChild(e('date'));
       e(`eventForm${friendId}`).appendChild(e('kind'));
     }
+
+    window.onload = () => {
+      const now = new Date;
+      e('date').value = `${now.getFullYear()}-${now.getMonth() + 1}-${now.getDate()}`;
+    };
   </script>
 
   <form action="/friend" method="post">
@@ -19,7 +24,7 @@
     <input type="submit" value="Create Friend">
     {% csrf_token %}
   </form>
-  days ago: <input type="number" id="daysAgo" name="days_ago" value=0><br>
+  date: <input type="text" id="date" name="date"><br>
   kind: <select id="kind" name="kind">
     <option value="plan">plan</option>
     <option value="meet">meet</option>
@@ -40,7 +45,7 @@
       <div class="events">
         {% for event in friend.event_set.all %}
             {{ event.server }} &nbsp;
-            {{ event.created_at }} &nbsp;
+            {{ event.date }} &nbsp;
             {{ event.kind }} <br>
         {% endfor %}
       </div>
