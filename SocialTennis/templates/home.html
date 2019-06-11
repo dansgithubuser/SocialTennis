@@ -5,52 +5,206 @@
 {% endblock %}
 
 {% block content %}
-  <script>
-    function e(id){ return document.getElementById(id) }
+  {% if request.user.is_authenticated %}
+    <script>
+      function e(id){ return document.getElementById(id) }
 
-    function submitEventPrep (friendId) {
-      e(`eventForm${friendId}`).appendChild(e('date'));
-      e(`eventForm${friendId}`).appendChild(e('kind'));
-    }
+      function minOver(values, threshold) {
+        for (const i of values)
+          if (i >= threshold)
+            return i;
+        return values[values.length - 1];
+      }
 
-    window.onload = () => {
-      const now = new Date;
-      e('date').value = `${now.getFullYear()}-${now.getMonth() + 1}-${now.getDate()}`;
-    };
-  </script>
+      const friends = {{ friends|safe }};
 
-  <form action="/friend" method="post">
-    Friend Name: <input type="text" name="name"><br>
-    <input type="submit" value="Create Friend">
-    {% csrf_token %}
-  </form>
-  date: <input type="text" id="date" name="date"><br>
-  kind: <select id="kind" name="kind">
-    <option value="plan">plan</option>
-    <option value="meet">meet</option>
-  </select>
+      window.onload = () => {
+        const now = new Date;
+        e('date').value = `${now.getFullYear()}-${now.getMonth() + 1}-${now.getDate()}`;
+        for (const canvas of e('ranking').querySelectorAll('canvas')) {
+          const friend = friends[canvas.id.split('-')[1]];
+          const ctx = canvas.getContext('2d');
+          const w = canvas.width  = canvas.offsetWidth;
+          const h = canvas.height = canvas.offsetHeight;
+          // background
+          ctx.fillStyle = '#eee';
+          ctx.fillRect(0, 0, w, h);
+          // no events
+          if (friend.events.length == 0) continue;
+          // drawing infrastructure
+          for (const i of friend.events) i.date = Date.parse(i.date);
+          const dW = 7 * 24 * 60 * 60 * 1000; // duration of week
+          const tF = Date.parse(e('date').value); // final time
+          const wW = minOver([1, 4, 12, 52], (tF - friend.events[0].date) / dW); // window in weeks
+          const tI = tF - wW * dW; // initial time
+          const pW = w / wW; // pixels per week
+          function plot(event) {
+            var y;
+            switch (event.server) {
+              case 'me': y = 0; break;
+              case 'neither': y = h / 2; break;
+              case 'them': y = h; break;
+            }
+            var style = '#000';
+            switch (event.kind) {
+              case 'plan': style = '#ff0'; break;
+              case 'meet': style = '#0f0'; break;
+            }
+            return {
+              x: pW * (event.date - tI) / dW,
+              y,
+              style,
+            };
+          }
+          function draw(event) {
+            pl = plot(event, w, h);
+            ctx.beginPath();
+            ctx.arc(pl.x, pl.y, h / 4, 0, 2 * Math.PI);
+            ctx.fillStyle = pl.style;
+            ctx.fill();
+          }
+          // weeks
+          ctx.fillStyle = '#ddd';
+          for (var i = 0; i < wW; i += 2)
+            ctx.fillRect(pW * i, 0, pW, h);
+          // multiple events
+          ctx.strokeStyle = 'black';
+          ctx.lineWidth = h / 8;
+          ctx.beginPath();
+          pl = plot(friend.events[0], w, h);
+          ctx.moveTo(pl.x, pl.y);
+          for (var i = 1; i < friend.events.length; ++i) {
+            pl = plot(friend.events[i], w, h);
+            ctx.lineTo(pl.x, pl.y);
+          }
+          ctx.stroke();
+          for (const event of friend.events) draw(event, ctx, w, h);
+        }
+      };
+    </script>
 
-  <div class="grid-container">
-    {% for friend in friends %}
-      <div class="friend">{{ friend.name }}</div>
-      <div class="server">
-        <form method="post" id="eventForm{{ friend.id }}" onsubmit="return submitEventPrep({{ friend.id }})">
-          <button type="submit" formaction="/event/me/{{ friend.id }}">Me</button>
-          <button type="submit" formaction="/event/them/{{ friend.id }}">Them</button>
-          <button type="submit" formaction="/event/neither/{{ friend.id }}">Neither</button>
-          <br><br>
-          {% csrf_token %}
-        </form>
+    <style>
+      .row {
+        display: flex;
+      }
+
+      .column {
+        flex: 1;
+      }
+
+      .scroll {
+        height: 15em;
+        overflow-y: scroll;
+        margin-right: 1em;
+        padding: 1em;
+        background-color: #ffe;
+      }
+
+      .diagram {
+        height: 1em;
+        width: 100%;
+      }
+
+      td {
+        padding-right: 1em;
+      }
+
+      thead > tr > td {
+        font-weight: bold;
+      }
+    </style>
+
+    <div>
+      <h2></h2>
+      <div class='scroll'>
+        <table id='ranking' style='width:100%'>
+          {% for friend in ranked %}
+            <tr>
+              <td style='width:1%'>{{ friend.name }}</td>
+              <td><canvas id='canvas-{{ friend.id }}' class='diagram'></canvas></td>
+            </tr>
+          {% endfor %}
+        </table>
       </div>
-      <div class="events">
-        {% for event in friend.event_set.all %}
-            {{ event.server }} &nbsp;
-            {{ event.date }} &nbsp;
-            {{ event.kind }} <br>
+    </div>
+    <form action="/friend" method="post">
+      <h2></h2>
+      Friend Name: <input type="text" name="name"><br>
+      <input type="submit" value="Create Friend">
+      {% csrf_token %}
+    </form>
+    <form action='/event' method='post'>
+      <h2></h2>
+      friends:
+        {% for friend_id, friend in friends.items %}
+          <input type='checkbox' name='friend' value='{{ friend_id }}'>{{ friend.name }}</input>
         {% endfor %}
+      <br>
+      server: <select id="server" name="server">
+        {% for choice in servers %}
+          <option value="{{ choice.0 }}">{{ choice.1 }}</option>
+        {% endfor %}
+      </select><br>
+      kind: <select id="kind" name="kind">
+        {% for choice in kinds %}
+          <option value="{{ choice.0 }}">{{ choice.1 }}</option>
+        {% endfor %}
+      </select><br>
+      note: <input type="text" name="note"><br>
+      date: <input type="text" id="date" name="date"><br>
+      <input type="submit" value="Create Event">
+      {% csrf_token %}
+    </form>
+    <div class='row'>
+      <div class='column'>
+        <h2>recent</h2>
+        <div class='scroll'>
+          <table>
+            <thead>
+              <td>friend</td>
+              <td>date</td>
+              <td>server</td>
+              <td>kind</td>
+            </thead>
+            {% for i in recent_events %}
+              <tr>
+                <td>{{ i.friend.name }}</td>
+                <td>{{ i.date }}</td>
+                <td>{{ i.server }}</td>
+                <td>{{ i.kind }}</td>
+              </tr>
+            {% endfor %}
+          </table>
+        </div>
       </div>
-    {% endfor %}
-  </div>
-
-
+      <div class='column'>
+        <h2>recently created</h2>
+        <div class='scroll'>
+          <table>
+            <thead>
+              <td>friend</td>
+              <td>date</td>
+              <td>server</td>
+              <td>kind</td>
+            </thead>
+            {% for i in recently_created_events %}
+              <tr>
+                <td>{{ i.friend.name }}</td>
+                <td>{{ i.date }}</td>
+                <td>{{ i.server }}</td>
+                <td>{{ i.kind }}</td>
+              </tr>
+            {% endfor %}
+          </table>
+        </div>
+      </div>
+    </div>
+  {% else %}
+    <div>
+      <a href='/signup'>sign up</a>
+    </div>
+      <a href='/login'>log in</a>
+    <div>
+    </div>
+  {% endif %}
 {% endblock %}
