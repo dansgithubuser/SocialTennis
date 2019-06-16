@@ -137,17 +137,17 @@
       <h2></h2>
       friends:
         {% for friend_id, friend in friends.items %}
-          <input type='checkbox' name='friend' value='{{ friend_id }}'>{{ friend.name }}</input>
+          <label><input type='checkbox' name='friend' value='{{ friend_id }}'>{{ friend.name }}</input></label>
         {% endfor %}
       <br>
       server:
         {% for choice in servers %}
-          <input type='radio' name='server' value="{{ choice.0 }}">{{ choice.1 }}
+          <label><input type='radio' name='server' value="{{ choice.0 }}">{{ choice.1 }}</label>
         {% endfor %}
       <br>
       kind:
         {% for choice in kinds %}
-          <input type='radio' name='kind' value="{{ choice.0 }}">{{ choice.1 }}
+          <label><input type='radio' name='kind' value="{{ choice.0 }}">{{ choice.1 }}</label>
         {% endfor %}
       <br>
       note: <input type="text" name="note"><br>
