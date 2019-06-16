@@ -5,7 +5,7 @@ from django.contrib.auth import views as auth_views
 urlpatterns = [
     path('', views.home),
     path('signup', views.signup),
-    path('login', auth_views.LoginView.as_view(template_name='login.html', redirect_field_name='home')),
+    path('login', auth_views.LoginView.as_view(template_name='login.html')),
     path('friend', views.friend),
     path('event', views.event),
 ]
