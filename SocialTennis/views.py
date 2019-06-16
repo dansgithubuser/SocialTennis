@@ -65,7 +65,6 @@ def home(request):
                 days_since_contact = (datetime.date.today() - friend.events[-1].date).days
                 if days_since_contact > 180:
                     friend.score += 2 * (days_since_contact - 180)
-            print(friend.name, friend.score)
             return friend
         context['ranked'] = sorted([score(i) for i in friends], key=lambda i: i.score, reverse=True)
     return render(request, 'home.html', context)
