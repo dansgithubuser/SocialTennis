@@ -140,16 +140,16 @@
           <input type='checkbox' name='friend' value='{{ friend_id }}'>{{ friend.name }}</input>
         {% endfor %}
       <br>
-      server: <select id="server" name="server">
+      server:
         {% for choice in servers %}
-          <option value="{{ choice.0 }}">{{ choice.1 }}</option>
+          <input type='radio' name='server' value="{{ choice.0 }}">{{ choice.1 }}
         {% endfor %}
-      </select><br>
-      kind: <select id="kind" name="kind">
+      <br>
+      kind:
         {% for choice in kinds %}
-          <option value="{{ choice.0 }}">{{ choice.1 }}</option>
+          <input type='radio' name='kind' value="{{ choice.0 }}">{{ choice.1 }}
         {% endfor %}
-      </select><br>
+      <br>
       note: <input type="text" name="note"><br>
       date: <input type="text" id="date" name="date"><br>
       <input type="submit" value="Create Event">
