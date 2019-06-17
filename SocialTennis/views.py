@@ -5,6 +5,7 @@ from django.shortcuts import render, redirect
 from django.views.decorators.csrf import csrf_exempt
 from django.http import HttpResponse
 from . import models
+from . import synesthesia
 
 @csrf_exempt
 def signup(request):
@@ -29,6 +30,7 @@ def home(request):
         context['friends'] = {}
         for friend in friends:
             friend.events = sorted(friend.event_set.all(), key=lambda i: i.date)[-5:]
+            color = synesthesia.color(friend.name)
             context['friends'][friend.id] = {
                 'name': friend.name,
                 'events': [{
@@ -36,6 +38,7 @@ def home(request):
                     'kind': i.kind,
                     'date': i.date.strftime('%Y-%m-%d'),
                 } for i in friend.events],
+                'color': color.css(),
             }
         # choices
         context['servers'] = models.Event.SERVER_CHOICES

@@ -137,7 +137,13 @@
       <h2></h2>
       friends:
         {% for friend_id, friend in friends.items %}
-          <label><input type='checkbox' name='friend' value='{{ friend_id }}'>{{ friend.name }}</input></label>
+          <label>
+            <input type='checkbox' name='friend' value='{{ friend_id }}'>
+              <span style='background-image: linear-gradient(to bottom,
+                {{ friend.color }}, white, white, white, {{ friend.color }}
+              );'>{{ friend.name }}</span>
+            </input>
+          </label>
         {% endfor %}
       <br>
       server:
