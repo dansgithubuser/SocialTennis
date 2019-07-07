@@ -8,4 +8,5 @@ urlpatterns = [
     path('login', auth_views.LoginView.as_view(template_name='login.html')),
     path('friend', views.friend),
     path('event', views.event),
+    path('event/delete/<int:id>', views.event_delete),
 ]

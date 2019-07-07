@@ -18,6 +18,12 @@
 
       const friends = {{ friends|safe }};
 
+      function eventDelete(id) {
+        if (!window.confirm('confirm delete')) return;
+        fetch(`/event/delete/${id}`);
+        location.reload();
+      }
+
       window.onload = () => {
         const now = new Date;
         e('date').value = `${now.getFullYear()}-${now.getMonth() + 1}-${now.getDate()}`;
@@ -192,6 +198,7 @@
               <td>date</td>
               <td>server</td>
               <td>kind</td>
+              <td>delete</td>
             </thead>
             {% for i in recently_created_events %}
               <tr>
@@ -199,6 +206,7 @@
                 <td>{{ i.date }}</td>
                 <td>{{ i.server }}</td>
                 <td>{{ i.kind }}</td>
+                <td><input type='button' value='delete' onclick='eventDelete({{ i.id }})'></td>
               </tr>
             {% endfor %}
           </table>

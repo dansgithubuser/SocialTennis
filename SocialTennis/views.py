@@ -82,7 +82,7 @@ def friend(request):
 def event(request):
     for friend_id in request.POST.getlist('friend'):
         if models.Friend.objects.get(id=friend_id).user_id != request.user.id:
-            return HttpResponse(status=403)
+            return HttpResponse(status=404)
         models.Event.objects.create(
             friend_id=int(friend_id),
             server=request.POST['server'],
@@ -91,3 +91,10 @@ def event(request):
             note=request.POST.get('note'),
         )
     return redirect('/')
+
+def event_delete(request, id):
+    event = models.Event.objects.get(id=id)
+    if event.friend.user_id != request.user.id:
+        return HttpResponse(status=404)
+    event.delete()
+    return HttpResponse(status=204)
