@@ -21,6 +21,8 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = 'trzo0c_4($b6_8%=0)mw7n_5p&e54e&b$=*041yao1kicjgh-#'
+if os.environ.get('DJANGOGO_ENV') != 'local':
+    SECRET_KEY = os.environ['SOCIAL_TENNIS_SECRET_KEY']
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = False
