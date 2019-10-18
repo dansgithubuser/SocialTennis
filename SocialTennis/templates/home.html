@@ -90,14 +90,6 @@
     </script>
 
     <style>
-      .row {
-        display: flex;
-      }
-
-      .column {
-        flex: 1;
-      }
-
       .scroll {
         height: 15em;
         overflow-y: scroll;
@@ -115,7 +107,7 @@
         padding: 1em;
         margin: .2em;
         display: inline-block;
-        background-color: lightgrey;
+        background-color: #f8f8f8;
       }
 
       td {
@@ -147,16 +139,18 @@
     </form>
     <br>
     <form action='/event' method='post'>
-      <div style='display: flex; flex-wrap: wrap'>
-        {% for friend_id, friend in friends.items %}
-          <label class='fat' style='
-            background-image: linear-gradient(to bottom,
-              {{ friend.color }}, white, white, white, {{ friend.color }}
-            );
-          '>
-            <input type='checkbox' name='friend' value='{{ friend_id }}'>{{ friend.name }}</input>
-          </label>
-        {% endfor %}
+      <div class='scroll'>
+        <div style='display: flex; flex-wrap: wrap'>
+          {% for friend_id, friend in friends.items %}
+            <label class='fat' style='
+              background-image: linear-gradient(to bottom,
+                {{ friend.color }}, white, white, white, {{ friend.color }}
+              );
+            '>
+              <input type='checkbox' name='friend' value='{{ friend_id }}'>{{ friend.name }}</input>
+            </label>
+          {% endfor %}
+        </div>
       </div>
       server:
         {% for choice in servers %}
@@ -173,51 +167,45 @@
       <input type="submit" value="Create Event" class='fat'>
       {% csrf_token %}
     </form>
-    <div class='row'>
-      <div class='column'>
-        <h2>recent</h2>
-        <div class='scroll'>
-          <table>
-            <thead>
-              <td>friend</td>
-              <td>date</td>
-              <td>server</td>
-              <td>kind</td>
-            </thead>
-            {% for i in recent_events %}
-              <tr>
-                <td>{{ i.friend.name }}</td>
-                <td>{{ i.date }}</td>
-                <td>{{ i.server }}</td>
-                <td>{{ i.kind }}</td>
-              </tr>
-            {% endfor %}
-          </table>
-        </div>
-      </div>
-      <div class='column'>
-        <h2>recently created</h2>
-        <div class='scroll'>
-          <table>
-            <thead>
-              <td>friend</td>
-              <td>date</td>
-              <td>server</td>
-              <td>kind</td>
-              <td>delete</td>
-            </thead>
-            {% for i in recently_created_events %}
-              <tr>
-                <td>{{ i.friend.name }}</td>
-                <td>{{ i.date }}</td>
-                <td>{{ i.server }}</td>
-                <td>{{ i.kind }}</td>
-                <td><input type='button' value='delete' onclick='eventDelete({{ i.id }})' class='fat'></td>
-              </tr>
-            {% endfor %}
-          </table>
-        </div>
-      </div>
+    <h2>recent</h2>
+    <div class='scroll'>
+      <table>
+        <thead>
+          <td>friend</td>
+          <td>date</td>
+          <td>server</td>
+          <td>kind</td>
+        </thead>
+        {% for i in recent_events %}
+          <tr>
+            <td>{{ i.friend.name }}</td>
+            <td>{{ i.date }}</td>
+            <td>{{ i.server }}</td>
+            <td>{{ i.kind }}</td>
+          </tr>
+        {% endfor %}
+      </table>
+    </div>
+    <h2>recently created</h2>
+    <div class='scroll'>
+      <table>
+        <thead>
+          <td>friend</td>
+          <td>date</td>
+          <td>server</td>
+          <td>kind</td>
+          <td>delete</td>
+        </thead>
+        {% for i in recently_created_events %}
+          <tr>
+            <td>{{ i.friend.name }}</td>
+            <td>{{ i.date }}</td>
+            <td>{{ i.server }}</td>
+            <td>{{ i.kind }}</td>
+            <td><input type='button' value='delete' onclick='eventDelete({{ i.id }})' class='fat'></td>
+          </tr>
+        {% endfor %}
+      </table>
     </div>
   {% else %}
     <div>

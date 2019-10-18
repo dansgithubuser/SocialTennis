@@ -28,7 +28,7 @@ def home(request):
         friends = models.Friend.objects.filter(user_id=request.user.id).select_related()
         # friends listing
         context['friends'] = {}
-        for friend in friends:
+        for friend in sorted(friends, key=lambda i: i.name.lower()):
             friend.events = sorted(friend.event_set.all(), key=lambda i: i.date)[-5:]
             color = synesthesia.color(friend.name)
             context['friends'][friend.id] = {
