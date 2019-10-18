@@ -11,7 +11,7 @@ args=parser.parse_args()
 djangogo.main(args,
 	project='SocialTennis_proj',
 	app='SocialTennis',
-	database='socialtennis_database',
-	user='socialtennis_user',
+	db_name='socialtennis_database',
+	db_user='socialtennis_user',
 	heroku_url='https://dans-social-tennis.herokuapp.com/',
 )
