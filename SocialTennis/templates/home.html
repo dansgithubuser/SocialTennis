@@ -111,6 +111,13 @@
         width: 100%;
       }
 
+      .fat {
+        padding: 1em;
+        margin: .2em;
+        display: inline-block;
+        background-color: lightgrey;
+      }
+
       td {
         padding-right: 1em;
       }
@@ -121,7 +128,6 @@
     </style>
 
     <div>
-      <h2></h2>
       <div class='scroll'>
         <table id='ranking' style='width:100%'>
           {% for friend in ranked %}
@@ -133,38 +139,38 @@
         </table>
       </div>
     </div>
+    <br>
     <form action="/friend" method="post">
-      <h2></h2>
-      Friend Name: <input type="text" name="name"><br>
-      <input type="submit" value="Create Friend">
+      Friend Name: <input type="text" name="name" class='fat'><br>
+      <input type="submit" value="Create Friend" class='fat'>
       {% csrf_token %}
     </form>
+    <br>
     <form action='/event' method='post'>
-      <h2></h2>
-      friends:
+      <div style='display: flex; flex-wrap: wrap'>
         {% for friend_id, friend in friends.items %}
-          <label>
-            <input type='checkbox' name='friend' value='{{ friend_id }}'>
-              <span style='background-image: linear-gradient(to bottom,
-                {{ friend.color }}, white, white, white, {{ friend.color }}
-              );'>{{ friend.name }}</span>
-            </input>
+          <label class='fat' style='
+            background-image: linear-gradient(to bottom,
+              {{ friend.color }}, white, white, white, {{ friend.color }}
+            );
+          '>
+            <input type='checkbox' name='friend' value='{{ friend_id }}'>{{ friend.name }}</input>
           </label>
         {% endfor %}
-      <br>
+      </div>
       server:
         {% for choice in servers %}
-          <label><input type='radio' name='server' value="{{ choice.0 }}">{{ choice.1 }}</label>
+          <label class='fat'><input type='radio' name='server' value="{{ choice.0 }}">{{ choice.1 }}</label>
         {% endfor %}
       <br>
       kind:
         {% for choice in kinds %}
-          <label><input type='radio' name='kind' value="{{ choice.0 }}">{{ choice.1 }}</label>
+          <label class='fat'><input type='radio' name='kind' value="{{ choice.0 }}">{{ choice.1 }}</label>
         {% endfor %}
       <br>
-      note: <input type="text" name="note"><br>
-      date: <input type="text" id="date" name="date"><br>
-      <input type="submit" value="Create Event">
+      note: <input type="text" name="note" class='fat'><br>
+      date: <input type="text" id="date" name="date" class='fat'><br>
+      <input type="submit" value="Create Event" class='fat'>
       {% csrf_token %}
     </form>
     <div class='row'>
@@ -206,7 +212,7 @@
                 <td>{{ i.date }}</td>
                 <td>{{ i.server }}</td>
                 <td>{{ i.kind }}</td>
-                <td><input type='button' value='delete' onclick='eventDelete({{ i.id }})'></td>
+                <td><input type='button' value='delete' onclick='eventDelete({{ i.id }})' class='fat'></td>
               </tr>
             {% endfor %}
           </table>

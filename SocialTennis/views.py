@@ -46,8 +46,8 @@ def home(request):
         # recent events
         fortnight_ago = datetime.datetime.now(datetime.timezone.utc) - datetime.timedelta(days=14)
         events = [j for i in friends for j in i.event_set.all()]
-        context['recently_created_events'] = sorted([i for i in events if i.created_at > fortnight_ago       ], key=lambda i: i.created_at, reverse=True)
-        context['recent_events'          ] = sorted([i for i in events if i.date       > fortnight_ago.date()], key=lambda i: i.date      , reverse=True)
+        context['recently_created_events'] = sorted(events, key=lambda i: i.created_at, reverse=True)[:20]
+        context['recent_events'          ] = sorted(events, key=lambda i: i.date      , reverse=True)[:20]
         # ranking
         def score(friend):
             friend.score = 0
